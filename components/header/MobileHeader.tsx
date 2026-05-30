@@ -32,7 +32,7 @@ export default function MobileHeader({ className }: { className: string }) {
           <Sparkles />
         </Button>
       </div>
-      <nav>
+      <nav className="hidden">
         <ul className="flex flex-col gap-4">
           <li>
             <Link className="" href="/profile">
