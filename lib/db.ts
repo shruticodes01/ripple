@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import assert from "node:assert";
 
 interface MongooseCache {
   conn: typeof mongoose | null;
@@ -8,6 +7,14 @@ interface MongooseCache {
 
 declare global {
   var mongoose: MongooseCache | undefined;
+}
+
+const MONGODB_URI = process.env.MONGODB_ATLAS_URI;
+// check URI at module load time
+if (!MONGODB_URI) {
+  throw new Error(
+    "Please define the MONGODB_URI environment variable inside .env.local",
+  );
 }
 
 // caching for local development
@@ -19,20 +26,15 @@ if (!cached) {
   cached = global.mongoose = { conn: null, promise: null };
 }
 
-export async function makeSureDbIsReady() {
-  // if connection exists return connection
+export async function connectDB() {
   if (cached.conn) {
     return cached.conn;
   }
 
-  const MONGODB_URI = process.env.MONGODB_URI;
-  assert(
-    MONGODB_URI,
-    "Please define the MONGODB_URI environment variable inside .env.local",
-  );
-
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI, { bufferCommands: false });
+    cached.promise = mongoose.connect(MONGODB_URI as string, {
+      bufferCommands: false,
+    });
   }
 
   cached.conn = await cached.promise;
