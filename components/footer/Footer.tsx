@@ -3,9 +3,9 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="w-full h-12 fixed bottom-0">
-      <nav className="h-full">
-        <ul className="h-full flex justify-evenly items-center">
+    <footer className="w-full h-12 fixed bottom-0 right-0">
+      <nav className="mx-auto">
+        <ul className="h-full flex justify-between items-center px-4">
           <li>
             <Link className="" href="">
               <Home />

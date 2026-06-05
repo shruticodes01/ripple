@@ -11,23 +11,28 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   onClick?: () => void;
 }
 
+export type InputDisplay = "row" | "col";
+
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id?: string;
   label?: string;
+  inputDisplay?: InputDisplay;
+  error?: string;
   className?: string;
 }
 
 export interface Ripple {
   id: number;
-  title: string;
-  body: string;
-  tags: string[];
-  reactions: {
-    likes: number;
-    dislikes: number;
-  };
+  creatorId: string;
+  content: string;
+  comments: string[];
+  likedBy: string[];
+  rePost: string[];
+  sharePost: string[];
+  bookmark: string[];
   views: number;
-  userId: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface RippleResponse {
@@ -42,4 +47,20 @@ export type ThemeMode = "light" | "dark";
 export interface ThemeContextProps {
   theme: ThemeMode;
   onThemeToggle: () => void;
+}
+
+export type ContainerType = "default" | "narrow";
+
+export interface ContainerProps {
+  className?: string;
+  children?: React.ReactNode;
+  containerType?: ContainerType;
+}
+
+export interface RegisterFormValidation {
+  fullName: string;
+  userName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
 }

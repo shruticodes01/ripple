@@ -1,7 +1,48 @@
+"use client";
+
 import Button from "@/components/ui/Button";
+import { Ripple } from "@/types/types";
+import { SendHorizonal } from "lucide-react";
 import Image from "next/image";
+import React, { useEffect, useState } from "react";
 
 export default function UserProfile() {
+  const [ripplePost, setRipplePost] = useState("");
+  const [userRipples, setUserRipples] = useState<Ripple[]>([]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setRipplePost(e.target.value);
+  };
+
+  const handleRippleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!ripplePost.trim()) {
+      return;
+    }
+
+    const res = await fetch("api/ripple", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: ripplePost }),
+    });
+
+    if (res.ok) {
+      const newRipple = await res.json();
+      setUserRipples((prev) => [newRipple, ...prev]);
+      setRipplePost("");
+    }
+  };
+
+  useEffect(() => {
+    async function fetchUserRipples() {
+      const res = await fetch("api/ripples");
+      const data = await res.json();
+      setUserRipples(data);
+    }
+
+    fetchUserRipples();
+  }, []);
+
   return (
     <>
       <section className={``}>
@@ -52,7 +93,34 @@ export default function UserProfile() {
           </div>
         </div>
       </section>
-      <section></section>
+      <section>
+        <div className="flex gap-4 items-baseline-last">
+          <label htmlFor="ripplePost">
+            Create a wave of ripples by sharing your thoughts
+            <textarea
+              className="w-full border border-blueish-black rounded-md p-4"
+              id="ripplePost"
+              name="ripplePost"
+              rows={5}
+              cols={45}
+              onChange={handleChange}
+              value={ripplePost}
+            />
+          </label>
+          <Button type="submit" onClick={() => handleRippleSubmit}>
+            <SendHorizonal />
+          </Button>
+        </div>
+      </section>
+      <section>
+        <div>
+          <ul>
+            {userRipples.map((ripple) => {
+              return <li key={ripple.id}>{ripple.content}</li>;
+            })}
+          </ul>
+        </div>
+      </section>
     </>
   );
 }

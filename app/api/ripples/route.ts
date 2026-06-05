@@ -40,8 +40,9 @@ export async function POST(req: NextRequest) {
     const newRipple = await Ripple.create(body);
     return Response.json(newRipple, { status: 201 });
   } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown Error";
     return Response.json(
-      { error: "Error creating a Ripple" },
+      { error: message },
       {
         status: 500,
       },
@@ -51,14 +52,47 @@ export async function POST(req: NextRequest) {
 
 // READ
 export async function GET() {
-  await connectDB();
-
   try {
+    await connectDB();
     const ripples = await Ripple.find({});
-    return new Response(JSON.stringify(ripples), { status: 200 });
+    return Response.json(ripples, { status: 200 });
   } catch (error) {
-    return new Response(JSON.stringify({ error: "Error fetching Ripples" }), {
-      status: 500,
+    const message = error instanceof Error ? error.message : "Unknown Error";
+    return Response.json(
+      { error: message },
+      {
+        status: 500,
+      },
+    );
+  }
+}
+
+// PUT OR PATCH
+
+export async function PUT(req: NextRequest) {
+  try {
+    await connectDB();
+    const { id, ...updatedData } = await req.json();
+    const updatedRipple = await Ripple.findByIdAndUpdate(id, updatedData, {
+      new: true,
     });
+    return Response.json(updatedRipple, { status: 200 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown Error";
+    return Response.json({ error: message }, { status: 500 });
+  }
+}
+
+// DELETE
+
+export async function DELETE(req: NextRequest) {
+  try {
+    await connectDB();
+    const { id } = await req.json();
+    const deletedRipple = Ripple.findByIdAndDelete(id);
+    return Response.json(deletedRipple, { status: 200 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown Error";
+    return Response.json({ error: message }, { status: 500 });
   }
 }
