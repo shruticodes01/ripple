@@ -1,4 +1,4 @@
-import { RegisterFormValidation } from "@/types/types";
+import { RegisterFormValidation, SigninFormValidation } from "@/types/types";
 
 export const validateSignup = (values: RegisterFormValidation) => {
   const errors: Partial<RegisterFormValidation> = {};
@@ -36,5 +36,18 @@ export const validateSignup = (values: RegisterFormValidation) => {
     errors.confirmPassword = "Passwords do not match";
   }
 
+  return errors;
+};
+
+export const validateSignin = (values: SigninFormValidation) => {
+  const errors: Partial<SigninFormValidation> = {};
+
+  if (!values.identifier.trim()) {
+    errors.identifier = "Email or username is required";
+  }
+
+  if (!values.password.trim()) {
+    errors.password = "Password is required";
+  }
   return errors;
 };

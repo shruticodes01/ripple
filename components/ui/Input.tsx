@@ -10,7 +10,7 @@ export default function Input({
   ...props
 }: InputProps) {
   return (
-    <p
+    <div
       className={`flex gap-1 ${inputDisplay === "col" ? "flex-col" : "items-end"}`}
     >
       <p className="flex items-baseline-last justify-between">
@@ -21,6 +21,6 @@ export default function Input({
       {complexityRule && (
         <span className="text-gray-700 text-xs">[{complexityRule}]</span>
       )}
-    </p>
+    </div>
   );
 }

@@ -1,9 +1,8 @@
 "use client";
 
-import { getRippleData } from "@/lib/ripplesAPI";
 import { Ripple } from "@/types/types";
 import RippleCard from "@/components/ripple/RippleCard";
-import { User } from "lucide-react";
+import { UserIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -11,15 +10,14 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const fetchTweets = async () => {
+    const fetchRipples = async () => {
       //add dynamic loader
-      const rippleData = await getRippleData();
-      console.log(rippleData);
-      console.log("type:", typeof rippleData);
-      setRipples(rippleData.posts);
+      const res = await fetch("/api/ripples");
+      const data = await res.json();
+      setRipples(data);
     };
 
-    fetchTweets();
+    fetchRipples();
   }, []);
 
   return (
@@ -35,12 +33,14 @@ export default function Home() {
                 return (
                   <li
                     className="flex items-start gap-3 py-2 border-b border-powdered-blue"
-                    key={data.id}
+                    key={data._id}
                   >
                     <div className="p-2 border border-blue rounded-full">
-                      <User className="shrink-0" />
+                      <UserIcon className="shrink-0" />
                     </div>{" "}
-                    <RippleCard ripple={data} />
+                    <div>
+                      <RippleCard ripple={data} />
+                    </div>
                   </li>
                 );
               })}

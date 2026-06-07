@@ -2,7 +2,7 @@
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { RegisterFormValidation } from "@/types/types";
-import { validateSignup } from "@/utils/validateSignup";
+import { validateSignup } from "@/utils/validateForms";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -18,6 +18,7 @@ export default function SignUp() {
   });
 
   const [errors, setErrors] = useState<Partial<RegisterFormValidation>>({});
+  const [serverError, setServerError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -42,19 +43,19 @@ export default function SignUp() {
       body: JSON.stringify(formData),
     });
 
-    const data = await res.json();
-
     if (res.ok) {
-      router.push("/");
+      router.push("/signin");
     } else {
-      setErrors(data.errors ?? {});
+      const data = await res.json();
+      setServerError(data.errors ?? {});
     }
   };
 
   return (
     <div className={`w-full h-full flex justify-center items-center mt-8`}>
+      {serverError && <p>{serverError}</p>}
       <form
-        className="w-full max-w-100 flex flex-col gap-4 bg-powdered-blue p-6 rounded-md"
+        className="w-full max-w-100 flex flex-col gap-4 bg-powdered-blue-100 p-6 rounded-md"
         noValidate
         onSubmit={handleSubmit}
       >
