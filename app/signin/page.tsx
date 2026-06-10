@@ -5,6 +5,7 @@ import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { SigninFormValidation } from "@/types/types";
 import { validateSignin } from "@/utils/validateForms";
+import { signIn } from "next-auth/react";
 
 export default function SignIn() {
   const router = useRouter();
@@ -14,6 +15,8 @@ export default function SignIn() {
   });
 
   const [errors, setErrors] = useState<Partial<SigninFormValidation>>({});
+  const [pending, setPending] = useState<boolean>(false);
+  const [serverError, setServerError] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -28,28 +31,31 @@ export default function SignIn() {
 
     const validationErrors = validateSignin(formData);
     setErrors(validationErrors);
-
     if (Object.keys(validationErrors).length > 0) {
       return;
     }
 
-    const res = await fetch("/api/auth/signin", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
+    setPending(true);
+    setServerError("");
+
+    const res = await signIn("credentials", {
+      identifier: formData.identifier,
+      password: formData.password,
+      redirect: false,
     });
 
-    if (res.ok) {
+    if (res?.ok) {
       router.push("/");
     } else {
-      const data = await res.json();
-      setErrors(data.errors || {});
+      setServerError(res?.error || "Something went wrong");
     }
+    setPending(false);
   };
 
   return (
     <>
       <form className="" noValidate onSubmit={handleSubmit}>
+        {serverError && <p className="text-red-500 text-sm">{serverError}</p>}
         <Input
           className=""
           id="identifier"
@@ -72,7 +78,7 @@ export default function SignIn() {
           onChange={handleChange}
           required
         />
-        <Button className="" type="submit" />
+        <Button className="" type="submit" disabled={pending} label="sign-in" />
       </form>
     </>
   );

@@ -24,7 +24,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 
 export interface RippleCreator {
   _id: string;
-  name: string;
+  fullName: string;
   userName: string;
   avatar?: string;
 }

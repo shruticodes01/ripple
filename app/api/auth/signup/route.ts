@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { connectDB } from "@/lib/db";
 import User from "@/lib/models/User";
-import { validateSignup } from "@/utils/validateForms";
+import { validateSignupData } from "@/utils/validateForms";
 import bcrypt from "bcryptjs";
 
 interface ExistingUserError {
@@ -12,7 +12,7 @@ interface ExistingUserError {
 export async function POST(req: NextRequest) {
   const body = await req.json();
 
-  const validationErrors = validateSignup(body);
+  const validationErrors = validateSignupData(body);
 
   if (Object.keys(validationErrors).length > 0) {
     return Response.json({ validationErrors }, { status: 422 });
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
   try {
     await connectDB();
-    // find an email or userName already exists
+    // find whether an email or userName already exists
     const existingUser = await User.findOne({
       $or: [{ email: body.email }, { userName: body.userName }],
     });
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     const hashedPassword = await bcrypt.hash(body.password, 10);
 
     const newUser = await User.create({
-      name: body.name,
+      fullName: body.fullName,
       userName: body.userName,
       email: body.email,
       password: hashedPassword,

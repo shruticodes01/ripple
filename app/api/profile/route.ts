@@ -1,16 +1,31 @@
+import { authOptions } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import Ripple from "@/lib/models/Ripple";
 import User from "@/lib/models/User";
+import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
 
-const TEMP_USER_ID = "6507f1f77bcf86cd79943901";
+// const TEMP_USER_ID = "6507f1f77bcf86cd79943901";
 
 // CREATE
 
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
-    void User;
+
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const user = await User.findOne({
+      $or: [{ email: session.user.email }, { userName: session.user.userName }],
+    });
+
+    if (!user) {
+      return Response.json({ error: "User not found" }, { status: 404 });
+    }
+
     const body = await req.json();
     const { content } = body;
 
@@ -18,7 +33,7 @@ export async function POST(req: NextRequest) {
       return Response.json({ error: "Content is required" }, { status: 400 });
     }
 
-    const newRipple = await Ripple.create({ content, creator: TEMP_USER_ID });
+    const newRipple = await Ripple.create({ content, creator: user._id });
     return Response.json(newRipple, { status: 201 });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown Error";
@@ -36,7 +51,7 @@ export async function GET() {
   try {
     await connectDB();
     const ripples = await Ripple.find({})
-      .populate("creator", "name userName avatar")
+      .populate("creator", "fullName userName avatar")
       .sort({ createdAt: -1 });
     return Response.json(ripples, { status: 200 });
   } catch (error) {

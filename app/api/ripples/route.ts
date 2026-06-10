@@ -55,8 +55,9 @@ import { NextRequest } from "next/server";
 export async function GET() {
   try {
     await connectDB();
+    void User;
     const ripples = await Ripple.find({})
-      .populate("creator", "name userName avatar")
+      .populate("creator", "fullName userName avatar")
       .sort({ createdAt: -1 });
     return Response.json(ripples, { status: 200 });
   } catch (error) {

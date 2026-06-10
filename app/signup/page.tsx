@@ -2,7 +2,7 @@
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { RegisterFormValidation } from "@/types/types";
-import { validateSignup } from "@/utils/validateForms";
+import { validateSignupForm } from "@/utils/validateForms";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -18,6 +18,7 @@ export default function SignUp() {
   });
 
   const [errors, setErrors] = useState<Partial<RegisterFormValidation>>({});
+  const [pending, setPending] = useState<boolean>(false);
   const [serverError, setServerError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,35 +31,43 @@ export default function SignUp() {
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const validationErrors = validateSignup(formData);
+    const validationErrors = validateSignupForm(formData);
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length > 0) {
       return;
     }
 
+    setPending(true);
+    setServerError("");
+
+    const { confirmPassword, ...dataToSend } = formData;
+
     const res = await fetch("/api/auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(dataToSend),
     });
 
     if (res.ok) {
       router.push("/signin");
     } else {
       const data = await res.json();
-      setServerError(data.errors ?? {});
+      setServerError(data.message ?? "Something went wrong");
     }
+
+    setPending(false);
   };
 
   return (
     <div className={`w-full h-full flex justify-center items-center mt-8`}>
-      {serverError && <p>{serverError}</p>}
       <form
         className="w-full max-w-100 flex flex-col gap-4 bg-powdered-blue-100 p-6 rounded-md"
         noValidate
         onSubmit={handleSubmit}
       >
+        {serverError && <p className="text-red-700 text-sm">{serverError}</p>}
+
         <Input
           className={`border border-blueish-black px-2 py-1 bg-white`}
           id="fullName"
@@ -125,9 +134,10 @@ export default function SignUp() {
         />
         <Button
           className={`mt-5`}
+          type="submit"
           variant="outline"
-          label="Create Account"
-          onClick={() => handleSubmit}
+          label={pending ? "Submitting..." : "Create Account"}
+          disabled={pending}
         />
       </form>
     </div>
