@@ -3,6 +3,7 @@ import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { RegisterFormValidation } from "@/types/types";
 import { validateSignupForm } from "@/utils/validateForms";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -60,7 +61,9 @@ export default function SignUp() {
   };
 
   return (
-    <div className={`w-full h-full flex justify-center items-center mt-8`}>
+    <div
+      className={`w-full h-full flex flex-col justify-center items-center mt-8`}
+    >
       <form
         className="w-full max-w-100 flex flex-col gap-4 bg-powdered-blue-100 p-6 rounded-md"
         noValidate
@@ -133,13 +136,22 @@ export default function SignUp() {
           required
         />
         <Button
-          className={`mt-5`}
+          className={`border-2 border-blueish-black py-2 px-4 rounded-4xl mt-5`}
           type="submit"
           variant="outline"
           label={pending ? "Submitting..." : "Create Account"}
           disabled={pending}
         />
       </form>
+      <div className="flex flex-col justify-center items-center gap-2 mt-8">
+        <p>Already have an account?</p>
+        <Link
+          className="border-2 border-powdered-blue py-2 px-4 rounded-4xl font-bold"
+          href="/signin"
+        >
+          Sign in
+        </Link>
+      </div>
     </div>
   );
 }

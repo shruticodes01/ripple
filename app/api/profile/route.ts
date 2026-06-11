@@ -50,7 +50,19 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   try {
     await connectDB();
-    const ripples = await Ripple.find({})
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const user = await User.findOne({
+      $or: [{ email: session.user.email }, { userName: session.user.userName }],
+    });
+    if (!user) {
+      return Response.json({ error: "User not found" }, { status: 404 });
+    }
+
+    const ripples = await Ripple.find({ creator: user._id })
       .populate("creator", "fullName userName avatar")
       .sort({ createdAt: -1 });
     return Response.json(ripples, { status: 200 });
@@ -70,7 +82,29 @@ export async function GET() {
 export async function PUT(req: NextRequest) {
   try {
     await connectDB();
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const user = await User.findOne({
+      $or: [{ email: session.user.email }, { userName: session.user.userName }],
+    });
+    if (!user) {
+      return Response.json({ error: "User not found" }, { status: 404 });
+    }
+
     const { id, ...updatedData } = await req.json();
+
+    const ripple = await Ripple.findById(id);
+    if (!ripple) {
+      return Response.json({ error: "Ripple not found" }, { status: 404 });
+    }
+
+    if (ripple.creator.toString() !== user._id.toString()) {
+      return Response.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     const updatedRipple = await Ripple.findByIdAndUpdate(id, updatedData, {
       new: true,
     });
@@ -86,7 +120,29 @@ export async function PUT(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   try {
     await connectDB();
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const user = await User.findOne({
+      $or: [{ email: session.user.email }, { userName: session.user.userName }],
+    });
+    if (!user) {
+      return Response.json({ error: "User not found" }, { status: 404 });
+    }
+
     const { id } = await req.json();
+
+    const ripple = await Ripple.findById(id);
+    if (!ripple) {
+      return Response.json({ error: "Ripple not found" }, { status: 404 });
+    }
+
+    if (ripple.creator.toString() !== user._id.toString()) {
+      return Response.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     const deletedRipple = await Ripple.findByIdAndDelete(id);
     return Response.json(deletedRipple, { status: 200 });
   } catch (error) {

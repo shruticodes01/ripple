@@ -1,4 +1,6 @@
 "use client";
+
+import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
@@ -45,7 +47,9 @@ export default function SignIn() {
     });
 
     if (res?.ok) {
-      router.push("/");
+      const params = new URLSearchParams(window.location.search);
+      const callbackUrl = params.get("callbackUrl") || "/";
+      router.push(callbackUrl);
     } else {
       setServerError(res?.error || "Something went wrong");
     }
@@ -53,33 +57,53 @@ export default function SignIn() {
   };
 
   return (
-    <>
-      <form className="" noValidate onSubmit={handleSubmit}>
+    <div className={`flex flex-col items-center justify-center mt-8`}>
+      <form
+        className="w-full max-w-100 flex flex-col gap-4 bg-powdered-blue-100 p-6 rounded-md"
+        noValidate
+        onSubmit={handleSubmit}
+      >
         {serverError && <p className="text-red-500 text-sm">{serverError}</p>}
         <Input
-          className=""
+          className={`border border-blueish-black px-2 py-1 bg-white`}
           id="identifier"
           name="identifier"
           label="Email or Username"
           type="text"
+          inputDisplay="col"
           error={errors.identifier}
           value={formData.identifier}
           onChange={handleChange}
           required
         />
         <Input
-          className=""
+          className={`border border-blueish-black px-2 py-1 bg-white`}
           id="password"
           name="password"
           label="Password"
           type="password"
+          inputDisplay="col"
           error={errors.password}
           value={formData.password}
           onChange={handleChange}
           required
         />
-        <Button className="" type="submit" disabled={pending} label="sign-in" />
+        <Button
+          className={`w-full max-w-fit self-center border-2 border-blueish-black py-2 px-4 rounded-4xl mt-5 font-bold`}
+          type="submit"
+          disabled={pending}
+          label="Sign in"
+        />
       </form>
-    </>
+      <div className="flex flex-col justify-center items-center gap-2 mt-8">
+        <p>Don&apos;t have an account?</p>
+        <Link
+          className="border-2 border-powdered-blue py-2 px-4 rounded-4xl font-bold"
+          href="/signup"
+        >
+          Sign up
+        </Link>
+      </div>
+    </div>
   );
 }

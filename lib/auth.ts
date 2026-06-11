@@ -7,7 +7,23 @@ import CredentialsProvider from "next-auth/providers/credentials";
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
+    maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
   },
+
+  jwt: {
+    maxAge: 7 * 24 * 60 * 60,
+  },
+
+  cookies: {
+    sessionToken: {
+      name: "next-auth.session-token",
+      options: {
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60,
+      },
+    },
+  },
+
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -62,6 +78,7 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
