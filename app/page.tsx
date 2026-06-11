@@ -22,10 +22,10 @@ export default function Home() {
   }, []);
 
   return (
-    <section className="w-full py-8">
+    <section className="w-full py-20 px-4">
       <div>
         <h1 className="text-xl">Trending Ripples</h1>
-        <ul className="w-full flex items-start gap-3 py-6">
+        <ul className="w-full flex flex-col items-start gap-3 py-6">
           {ripples.map((data: Ripple) => {
             console.log(data);
 

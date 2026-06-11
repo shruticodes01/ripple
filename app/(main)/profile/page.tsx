@@ -49,7 +49,7 @@ export default function UserProfile() {
 
   return (
     <>
-      <section className={``}>
+      <section className={`w-full pt-20`}>
         <div className="relative mb-12">
           <div className={`w-full h-125 bg-blue-300 flex justify-end`}>
             <div className="w-full h-full p-4">
@@ -80,11 +80,14 @@ export default function UserProfile() {
             <Button label="Follow" />
           </div>
         </div>
-        <div className="py-4">
-          <div>
+        <div className="flex flex-col gap-4 py-10">
+          <div className="flex justify-between">
             <p>Bio</p>
+            <div>
+              <Button label="Edit Profile" />
+            </div>
           </div>
-          <div className="flex gap-4 relative left-60">
+          <div className="flex flex-wrap wrap-normal gap-4">
             <p>
               <strong>0</strong> Following
             </p>
@@ -92,29 +95,26 @@ export default function UserProfile() {
               <strong>0</strong> Followers
             </p>
           </div>
-          <div>
-            <Button label="Edit Profile" />
-          </div>
         </div>
       </section>
-      <section>
+      <section className="py-10">
         <form
-          className="flex gap-4 items-baseline-last"
+          className="flex max-md:gap-2 md:gap-4 items-baseline-last"
           onSubmit={handleRippleSubmit}
         >
-          <label htmlFor="ripplePost">
+          <label className="flex flex-col gap-4" htmlFor="ripplePost">
             Create a wave of ripples by sharing your thoughts
             <textarea
-              className="w-full border border-blueish-black rounded-md p-4"
+              className="w-full border border-blueish-black rounded-md max-md:p-2 md:p-4"
               id="ripplePost"
               name="ripplePost"
               rows={5}
-              cols={45}
+              cols={40}
               onChange={handleChange}
               value={ripplePost}
             />
           </label>
-          <Button type="submit">
+          <Button className="self-end" type="submit">
             <SendHorizonal />
           </Button>
         </form>
