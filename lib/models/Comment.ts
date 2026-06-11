@@ -12,7 +12,7 @@ const CommentSchema = new mongoose.Schema(
       ref: "Ripple",
       required: true,
     },
-    content: { type: String, maxlength: 300, reuired: true },
+    content: { type: String, maxlength: 300, required: true },
     likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     parentComment: {
       type: mongoose.Schema.Types.ObjectId,

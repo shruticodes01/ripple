@@ -1,5 +1,6 @@
 "use client";
 
+import RippleCard from "@/components/ripple/RippleCard";
 import Button from "@/components/ui/Button";
 import { Ripple } from "@/types/types";
 import { SendHorizonal } from "lucide-react";
@@ -14,13 +15,13 @@ export default function UserProfile() {
     setRipplePost(e.target.value);
   };
 
-  const handleRippleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleRippleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!ripplePost.trim()) {
       return;
     }
 
-    const res = await fetch("api/ripple", {
+    const res = await fetch("/api/profile", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ content: ripplePost }),
@@ -29,14 +30,17 @@ export default function UserProfile() {
     if (res.ok) {
       const newRipple = await res.json();
       setUserRipples((prev) => [newRipple, ...prev]);
+      console.log(`type: ${typeof userRipples}`);
       setRipplePost("");
     }
   };
 
   useEffect(() => {
     async function fetchUserRipples() {
-      const res = await fetch("api/ripples");
+      const res = await fetch("/api/profile");
       const data = await res.json();
+
+      console.log("API response:", data);
       setUserRipples(data);
     }
 
@@ -94,7 +98,10 @@ export default function UserProfile() {
         </div>
       </section>
       <section>
-        <div className="flex gap-4 items-baseline-last">
+        <form
+          className="flex gap-4 items-baseline-last"
+          onSubmit={handleRippleSubmit}
+        >
           <label htmlFor="ripplePost">
             Create a wave of ripples by sharing your thoughts
             <textarea
@@ -107,19 +114,21 @@ export default function UserProfile() {
               value={ripplePost}
             />
           </label>
-          <Button type="submit" onClick={() => handleRippleSubmit}>
+          <Button type="submit">
             <SendHorizonal />
           </Button>
-        </div>
+        </form>
       </section>
       <section>
-        <div>
-          <ul>
-            {userRipples.map((ripple) => {
-              return <li key={ripple.id}>{ripple.content}</li>;
-            })}
-          </ul>
-        </div>
+        <ul className="mt-8">
+          {userRipples.map((ripple) => {
+            return (
+              <li key={ripple._id}>
+                <RippleCard ripple={ripple} />
+              </li>
+            );
+          })}
+        </ul>
       </section>
     </>
   );

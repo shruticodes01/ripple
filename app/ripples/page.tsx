@@ -18,7 +18,7 @@ export default async function RipplePage() {
             return (
               <li
                 className="flex items-start gap-3 py-2 border-b border-powdered-blue"
-                key={data.id}
+                key={data._id}
               >
                 <div className="p-2 border border-blue rounded-full">
                   <User className="shrink-0" />

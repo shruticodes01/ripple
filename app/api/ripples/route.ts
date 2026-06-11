@@ -2,10 +2,6 @@
 // import fileSystem from "node:fs/promises";
 // import path from "path";
 
-import { connectDB } from "@/lib/db";
-import Ripple from "@/lib/models/Ripple";
-import { NextRequest } from "next/server";
-
 // export async function GET(): Promise<Ripple[]> {
 //   const filePath = path.join(process.cwd(), "db-json");
 //   const rawData = await fileSystem.readFile(filePath, { encoding: "utf8" });
@@ -31,30 +27,38 @@ import { NextRequest } from "next/server";
 //   return Response.json(body.posts) as unknown as Promise<Ripple[]>;
 // }
 
-// CREATE
+import { connectDB } from "@/lib/db";
+import Ripple from "@/lib/models/Ripple";
+import User from "@/lib/models/User";
+import { NextRequest } from "next/server";
 
-export async function POST(req: NextRequest) {
-  try {
-    await connectDB();
-    const body = await req.json();
-    const newRipple = await Ripple.create(body);
-    return Response.json(newRipple, { status: 201 });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown Error";
-    return Response.json(
-      { error: message },
-      {
-        status: 500,
-      },
-    );
-  }
-}
+// // CREATE
+
+// export async function POST(req: NextRequest) {
+//   try {
+//     await connectDB();
+//     const body = await req.json();
+//     const newRipple = await Ripple.create(body);
+//     return Response.json(newRipple, { status: 201 });
+//   } catch (error) {
+//     const message = error instanceof Error ? error.message : "Unknown Error";
+//     return Response.json(
+//       { error: message },
+//       {
+//         status: 500,
+//       },
+//     );
+//   }
+// }
 
 // READ
 export async function GET() {
   try {
     await connectDB();
-    const ripples = await Ripple.find({});
+    void User;
+    const ripples = await Ripple.find({})
+      .populate("creator", "fullName userName avatar")
+      .sort({ createdAt: -1 });
     return Response.json(ripples, { status: 200 });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown Error";
@@ -67,32 +71,32 @@ export async function GET() {
   }
 }
 
-// PUT OR PATCH
+// // PUT OR PATCH
 
-export async function PUT(req: NextRequest) {
-  try {
-    await connectDB();
-    const { id, ...updatedData } = await req.json();
-    const updatedRipple = await Ripple.findByIdAndUpdate(id, updatedData, {
-      new: true,
-    });
-    return Response.json(updatedRipple, { status: 200 });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown Error";
-    return Response.json({ error: message }, { status: 500 });
-  }
-}
+// export async function PUT(req: NextRequest) {
+//   try {
+//     await connectDB();
+//     const { id, ...updatedData } = await req.json();
+//     const updatedRipple = await Ripple.findByIdAndUpdate(id, updatedData, {
+//       new: true,
+//     });
+//     return Response.json(updatedRipple, { status: 200 });
+//   } catch (error) {
+//     const message = error instanceof Error ? error.message : "Unknown Error";
+//     return Response.json({ error: message }, { status: 500 });
+//   }
+// }
 
-// DELETE
+// // DELETE
 
-export async function DELETE(req: NextRequest) {
-  try {
-    await connectDB();
-    const { id } = await req.json();
-    const deletedRipple = Ripple.findByIdAndDelete(id);
-    return Response.json(deletedRipple, { status: 200 });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown Error";
-    return Response.json({ error: message }, { status: 500 });
-  }
-}
+// export async function DELETE(req: NextRequest) {
+//   try {
+//     await connectDB();
+//     const { id } = await req.json();
+//     const deletedRipple = Ripple.findByIdAndDelete(id);
+//     return Response.json(deletedRipple, { status: 200 });
+//   } catch (error) {
+//     const message = error instanceof Error ? error.message : "Unknown Error";
+//     return Response.json({ error: message }, { status: 500 });
+//   }
+// }

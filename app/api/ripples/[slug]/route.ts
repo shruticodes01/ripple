@@ -10,7 +10,7 @@ export async function GET({ params }: { params: { slug: string } }) {
     }
     return Response.json(ripple, { status: 200 });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown Erro";
+    const message = error instanceof Error ? error.message : "Unknown Error";
     return Response.json({ error: message }, { status: 500 });
   }
 }

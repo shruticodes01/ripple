@@ -5,6 +5,11 @@
   /*#111184 rgb(17,17,132)*/
   --color-powdered-blue: hsl(240, 100%, 73%);
   /*#7373FF rgb(115,115,255)*/
+  --color-powdered-blue-100: hsl(240, 100%, 80%);
+  /*rgb(153, 153, 255) #9999ff*/
+  --color-powdered-blue-200: hsl(240, 100%, 75%);
+  /*rgb(128, 128, 255) #8080ff*/
+
   --color-blue: hsl(240, 79%, 57%);
   /*#3C3CE8 rgb(60,60,232)*/
   --color-blueish-black: hsl(240, 78%, 12%);

@@ -1,6 +1,9 @@
-import { RegisterFormValidation } from "@/types/types";
+import { RegisterFormValidation, SigninFormValidation } from "@/types/types";
 
-export const validateSignup = (values: RegisterFormValidation) => {
+// sign-up form that excludes confirmPassword, for server
+export const validateSignupData = (
+  values: Omit<RegisterFormValidation, "confirmPassword">,
+) => {
   const errors: Partial<RegisterFormValidation> = {};
   if (!values.fullName.trim()) {
     errors.fullName = "Name is required";
@@ -30,11 +33,30 @@ export const validateSignup = (values: RegisterFormValidation) => {
     errors.password = "Password too weak";
   }
 
+  return errors;
+};
+
+// sign-up form validation on client side
+export const validateSignupForm = (values: RegisterFormValidation) => {
+  const errors = validateSignupData(values);
   if (!values.confirmPassword.trim()) {
     errors.confirmPassword = "Please confirm your password";
   } else if (values.confirmPassword !== values.password) {
     errors.confirmPassword = "Passwords do not match";
   }
 
+  return errors;
+};
+
+export const validateSignin = (values: SigninFormValidation) => {
+  const errors: Partial<SigninFormValidation> = {};
+
+  if (!values.identifier.trim()) {
+    errors.identifier = "Email or username is required";
+  }
+
+  if (!values.password.trim()) {
+    errors.password = "Password is required";
+  }
   return errors;
 };

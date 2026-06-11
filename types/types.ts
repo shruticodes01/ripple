@@ -19,11 +19,19 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   inputDisplay?: InputDisplay;
   error?: string;
   className?: string;
+  complexityRule?: string;
+}
+
+export interface RippleCreator {
+  _id: string;
+  fullName: string;
+  userName: string;
+  avatar?: string;
 }
 
 export interface Ripple {
-  id: number;
-  creatorId: string;
+  _id: string;
+  creator: string | RippleCreator;
   content: string;
   comments: string[];
   likedBy: string[];
@@ -33,13 +41,6 @@ export interface Ripple {
   views: number;
   createdAt: string;
   updatedAt: string;
-}
-
-export interface RippleResponse {
-  posts: Ripple[];
-  total: number;
-  skip: number;
-  limit: number;
 }
 
 export type ThemeMode = "light" | "dark";
@@ -63,4 +64,9 @@ export interface RegisterFormValidation {
   email: string;
   password: string;
   confirmPassword: string;
+}
+
+export interface SigninFormValidation {
+  identifier: string;
+  password: string;
 }
