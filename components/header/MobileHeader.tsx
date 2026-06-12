@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { ArrowLeft, Bookmark, Ellipsis, UserIcon, X } from "lucide-react";
+import { Bookmark, Ellipsis, Home, Mail, UserIcon, X } from "lucide-react";
 import Button from "../ui/Button";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,7 +18,7 @@ export default function MobileHeader({ className }: { className: string }) {
 
   return (
     <header
-      className={`w-full h-14 flex-col items-center fixed top z-1 p-4 ${className}`}
+      className={`w-full h-14 flex-col items-center fixed top z-1 p-4 ${theme === "light" ? "bg-white" : "bg-blueish-black"} ${className}`}
     >
       <div className="w-full h-full flex items-center justify-between relative">
         {/* <Link className="w-full max-w-fit" href="/">
@@ -36,7 +36,7 @@ export default function MobileHeader({ className }: { className: string }) {
         </Link>
 
         <Button
-          className={`w-fit h-fit inline-flex absolute right-0 aspect-square z-9999 cursor-pointer ${theme === "light" ? "text-blueish-black" : "text-white"}`}
+          className={`w-fit h-fit inline-flex absolute right-0 aspect-square z-9999 cursor-pointer`}
           onClick={() => setNavMenuVisible((menuVisible) => !menuVisible)}
         >
           {navMenuVisible ? <X /> : <Ellipsis />}
@@ -44,30 +44,69 @@ export default function MobileHeader({ className }: { className: string }) {
       </div>
       <nav className={``}>
         <ul
-          className={`w-full h-full flex uppercase **:cursor-pointer ${!navMenuVisible ? "translate-x-full transition-transform duration-350ms ease-out" : theme === "light" && navMenuVisible ? `${navVisibleClass} bg-white/50 backdrop-blur-[6rem] text-blueish-black` : theme === "dark" && navMenuVisible ? `${navVisibleClass} bg-blueish-black/50 text-white backdrop-blur-[6rem]` : ""}`}
+          className={`w-full h-full flex uppercase **:cursor-pointer ${!navMenuVisible ? "p-4 translate-x-full transition-transform duration-350ms ease-out" : theme === "light" && navMenuVisible ? `${navVisibleClass} bg-light-gray/50 backdrop-blur-[6rem] text-blueish-black` : theme === "dark" && navMenuVisible ? `${navVisibleClass} bg-blueish-black/60 text-light-gray backdrop-blur-[10rem]` : ""}`}
         >
-          <li className="p-2">
-            <Link className="flex gap-2" href="/profile">
+          <li
+            className={`p-2 hover:scale-110 hover:inset-ring-2 ${theme === "light" ? " hover:inset-ring-blue hover:shadow-[0_0_0.25rem_-0.05rem]" : "hover:inset-ring-powdered-blue hover:shadow-[0_0_0.25rem_-0.05rem]"}`}
+          >
+            <Link
+              className={`flex gap-2 focus-visible:p-2 not-hover:focus-visible:outline-2 focus-visible:outline-offset-3 ${theme === "light" ? "focus-visible:bg-blue/40 focus-visible:outline-blue" : theme === "dark" && navMenuVisible ? "focus-visible:bg-powdered-blue/40 focus-visible:outline-powdered-blue" : "p-3"}`}
+              href="/"
+            >
+              <Home /> Home
+            </Link>
+          </li>
+
+          <li
+            className={`p-2 hover:scale-110 hover:inset-ring-2 ${theme === "light" ? " hover:inset-ring-blue hover:shadow-[0_0_0.25rem_-0.05rem]" : "hover:inset-ring-powdered-blue hover:shadow-[0_0_0.25rem_-0.05rem]"}`}
+          >
+            <Link
+              className={`flex gap-2 focus-visible:p-2 not-hover:focus-visible:outline-2 focus-visible:outline-offset-3 ${theme === "light" ? "focus-visible:bg-blue/40 focus-visible:outline-blue" : theme === "dark" && navMenuVisible ? "focus-visible:bg-powdered-blue/40 focus-visible:outline-powdered-blue" : "p-3"}`}
+              href="/profile"
+            >
               <UserIcon /> Profile
             </Link>
           </li>
 
-          <li className="p-2">
-            <Link className="flex gap-2" href="/bookmarks">
+          <li
+            className={`p-2 hover:scale-110 hover:inset-ring-2 ${theme === "light" ? " hover:inset-ring-blue hover:shadow-[0_0_0.25rem_-0.05rem]" : "hover:inset-ring-powdered-blue hover:shadow-[0_0_0.25rem_-0.05rem]"}`}
+          >
+            <Link
+              className={`flex gap-2 focus-visible:p-2 not-hover:focus-visible:outline-2 focus-visible:outline-offset-3 ${theme === "light" ? "focus-visible:bg-blue/40 focus-visible:outline-blue" : "focus-visible:bg-powdered-blue/40 focus-visible:outline-powdered-blue"}`}
+              href="/messages"
+            >
+              <Mail /> Messages
+            </Link>
+          </li>
+
+          <li
+            className={`p-2 hover:scale-110 hover:inset-ring-2 ${theme === "light" ? " hover:inset-ring-blue hover:shadow-[0_0_0.25rem_-0.05rem]" : "hover:inset-ring-powdered-blue hover:shadow-[0_0_0.25rem_-0.05rem]"}`}
+          >
+            <Link
+              className={`flex gap-2 focus-visible:p-2 not-hover:focus-visible:outline-2 focus-visible:outline-offset-3 ${theme === "light" ? "focus-visible:bg-blue/40 focus-visible:outline-blue" : "focus-visible:bg-powdered-blue/40 focus-visible:outline-powdered-blue"}`}
+              href="/bookmarks"
+            >
               <Bookmark /> Bookmarks
             </Link>
           </li>
 
-          <li className="p-2">
+          <li
+            className={`p-2 hover:scale-110 hover:inset-ring-2 ${theme === "light" ? " hover:inset-ring-blue hover:shadow-[0_0_0.25rem_-0.05rem]" : "hover:inset-ring-powdered-blue hover:shadow-[0_0_0.25rem_-0.05rem]"}`}
+          >
             <ToggleThemeBtn
+              className={`uppercase focus-visible:p-2 not-hover:focus-visible:outline-2 focus-visible:outline-offset-3 ${theme === "light" ? "focus-visible:bg-blue/40 focus-visible:outline-blue" : "focus-visible:bg-powdered-blue/40 focus-visible:outline-powdered-blue"}`}
               role="menuitem"
               onToggle={() => setNavMenuVisible((menuVisible) => !menuVisible)}
             />
           </li>
 
           <ul className="flex flex-col gap-4">
-            <li className="p-2">
-              <SignOutButton />
+            <li
+              className={`p-2 hover:scale-110 hover:inset-ring-2 ${theme === "light" ? " hover:inset-ring-blue hover:shadow-[0_0_0.25rem_-0.05rem]" : "hover:inset-ring-powdered-blue hover:shadow-[0_0_0.25rem_-0.05rem]"}`}
+            >
+              <SignOutButton
+                className={`uppercase focus-visible:p-2 not-hover:focus-visible:outline-2 focus-visible:outline-offset-3 ${theme === "light" ? "focus-visible:bg-blue/40 focus-visible:outline-blue" : "focus-visible:bg-powdered-blue/40 focus-visible:outline-powdered-blue"}`}
+              />
             </li>
           </ul>
         </ul>

@@ -13,7 +13,7 @@ import Container from "@/layouts/Container";
 // const geistMono = Geist_Mono({
 //   variable: "--font-geist-mono",
 //   subsets: ["latin"],
-// });
+// });0[p----------45555555555fffrrtttttttttt]
 
 export const metadata: Metadata = {
   title: "Ripple",

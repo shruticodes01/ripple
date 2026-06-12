@@ -2,12 +2,14 @@
 
 import RippleCard from "@/components/ripple/RippleCard";
 import Button from "@/components/ui/Button";
+import { useTheme } from "@/store/themeContext/useTheme";
 import { Ripple } from "@/types/types";
-import { SendHorizonal } from "lucide-react";
+import { SendHorizonal, UserIcon } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 export default function UserProfile() {
+  const { theme } = useTheme();
   const [ripplePost, setRipplePost] = useState("");
   const [userRipples, setUserRipples] = useState<Ripple[]>([]);
 
@@ -51,40 +53,44 @@ export default function UserProfile() {
     <>
       <section className={`w-full pt-20`}>
         <div className="relative mb-12">
-          <div className={`w-full h-125 bg-blue-300 flex justify-end`}>
-            <div className="w-full h-full p-4">
-              <Image
+          <div className={`w-full max-md:h-80 md:h-125 bg-blue-300 `}>
+            <div className="w-full h-full flex justify-end p-4">
+              {/* <Image
                 className=""
                 src="/"
                 alt="profile-banner"
                 width={1500}
                 height={500}
+              /> */}
+              <Button
+                className={`self-end text-navy-blue`}
+                label="+ Add Banner"
               />
-              <Button className={``} label="+ Add Banner" />
             </div>
           </div>
           <div
-            className={`w-50 h-50 border-2 border-black rounded-full absolute -bottom-12`}
+            className={`max-md:w-30 max-md:h-30 md:w-50 md:h-50 border-2 rounded-full absolute max-md:-bottom-4 md:-bottom-12 ${theme === "light" ? "border-blueish-black" : "border-light-gray"}`}
           >
-            <Button>
-              <Image
-                className="rounded-full text-center"
-                src="/"
-                width={200}
-                height={200}
-                alt="avatar"
-              />
-            </Button>
+            <UserIcon
+              className="w-24 h-24 md:w-32 md:h-32 absolute max-md:bottom-4 max-md:right-3 md:right-9 bottom-9"
+              strokeWidth={0.5}
+            />
           </div>
           <div className="w-full h-12 flex justify-end items-center">
-            <Button label="Follow" />
+            <Button
+              className={`max-md:px-2.5 max-md:py-1 md:px-4 md:py-2 rounded-full ${theme === "light" ? "bg-blueish-black text-light-gray" : "bg-light-gray text-blueish-black"}`}
+              label="Follow"
+            />
           </div>
         </div>
-        <div className="flex flex-col gap-4 py-10">
+        <div className="flex flex-col gap-4 pt-10">
           <div className="flex justify-between">
             <p>Bio</p>
             <div>
-              <Button label="Edit Profile" />
+              <Button
+                className={`max-md:px-2.5 max-md:py-1 md:px-4 md:py-2 rounded-full ${theme === "light" ? "bg-blueish-black text-light-gray" : "bg-light-gray text-blueish-black"}`}
+                label="Edit Profile"
+              />
             </div>
           </div>
           <div className="flex flex-wrap wrap-normal gap-4">
@@ -105,7 +111,7 @@ export default function UserProfile() {
           <label className="flex flex-col gap-4" htmlFor="ripplePost">
             Create a wave of ripples by sharing your thoughts
             <textarea
-              className="w-full border border-blueish-black rounded-md max-md:p-2 md:p-4"
+              className={`w-full border rounded-md max-md:p-2 md:p-4 ${theme === "light" ? "border-blueish-black" : "border-light-gray"}`}
               id="ripplePost"
               name="ripplePost"
               rows={5}
@@ -123,7 +129,7 @@ export default function UserProfile() {
         <ul className="mt-8">
           {userRipples.map((ripple) => {
             return (
-              <li key={ripple._id}>
+              <li className="py-2" key={ripple._id}>
                 <RippleCard ripple={ripple} />
               </li>
             );

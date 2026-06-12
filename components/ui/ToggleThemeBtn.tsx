@@ -1,6 +1,6 @@
 import { useTheme } from "@/store/themeContext/useTheme";
 import Button from "./Button";
-import { LucideMoon, LucideSun, ToggleLeft, ToggleRight } from "lucide-react";
+import { LucideMoon, LucideSun } from "lucide-react";
 
 export default function ToggleThemeBtn({
   onToggle,
@@ -25,15 +25,11 @@ export default function ToggleThemeBtn({
       }}
       {...props}
     >
+      {theme === "light" ? <LucideMoon /> : <LucideSun />}
       {theme === "light" ? (
-        <LucideSun />
+        <span className="">Dark Mode</span>
       ) : (
-        <LucideMoon className={``} color="#3C3CE8" />
-      )}
-      {theme === "light" ? (
-        <span className="uppercase">Light mode</span>
-      ) : (
-        <span className="uppercase">Dark mode</span>
+        <span className="">Light Mode</span>
       )}
     </Button>
   );

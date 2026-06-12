@@ -1,6 +1,10 @@
 @import "tailwindcss";
 
 @theme {
+
+  --color-light-gray: hsl(0, 0%, 95%);
+  /*#f2f2f2 	rgb(242, 242, 242)*/
+
   --color-navy-blue: hsl(240, 77%, 29%);
   /*#111184 rgb(17,17,132)*/
   --color-powdered-blue: hsl(240, 100%, 73%);
@@ -130,13 +134,23 @@ h6 {
 
 
 @media(max-width:48rem) {
-  .header__desktop {
+
+  .header__desktop,
+  .sidebar__nav {
     display: none;
   }
+
 }
 
 @media(min-width:48rem) {
   .header__mobile {
     display: none;
   }
+
+  .grid__container {
+    display: grid;
+    grid-template-areas: ".sidebar__nav .main .sidebar__trends";
+    grid-template-columns: 20% 55% 25%;
+  }
+
 }
