@@ -4,11 +4,9 @@ import { Heart, MessageCircle, Repeat, UserIcon } from "lucide-react";
 
 export default function RippleCard({ ripple }: { ripple: Ripple }) {
   return (
-    <article
-      className={`w-full flex items-start gap-4 p-4 border-b border-powdered-blue-200`}
-    >
+    <article className={`w-full flex items-start gap-4 md:p-4`}>
       <div className="max-w-full w-fit aspect-square p-2 border border-blue rounded-full">
-        <UserIcon className="shrink-0" />
+        <UserIcon className="shrink-0 max-[30rem]:w-5 max-[30rem]:h-5 w-7 h-7" />
       </div>{" "}
       <div className="w-full">
         <h2>
