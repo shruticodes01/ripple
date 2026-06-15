@@ -1,10 +1,8 @@
-import { connectDB } from "@/lib/db";
-import Ripple from "@/lib/models/Ripple";
+import { getSingleRipple } from "@/lib/ripples";
 
-export async function GET({ params }: { params: { slug: string } }) {
+export async function GET(_: Request, { params }: { params: { id: string } }) {
   try {
-    await connectDB();
-    const ripple = await Ripple.findById(params.slug);
+    const ripple = await getSingleRipple(params.id);
     if (!ripple) {
       return Response.json({ error: "Ripple Not Found" }, { status: 404 });
     }

@@ -1,4 +1,5 @@
-import React, { createContext, useState } from "react";
+"use client";
+import React, { createContext, useEffect, useState } from "react";
 import { ThemeContextProps, ThemeMode } from "@/types/types";
 
 export const ThemeContext = createContext<ThemeContextProps>({
@@ -30,13 +31,21 @@ export default function ThemeContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [theme, setTheme] = useState<ThemeMode>(getInitialTheme);
+  const [theme, setTheme] = useState<ThemeMode>("light");
+
+  useEffect(() => {
+    //eslint-disable-next-line react-hooks/set-state-in-effect
+    setTheme(getInitialTheme());
+  }, []);
 
   const handleThemeToggle = () => {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+    setTheme((prevTheme) => {
+      const next = prevTheme === "light" ? "dark" : "light";
+      // store the toggled theme in the local storage;
+      localStorage.setItem("theme", next);
 
-    // store the toggled theme in the local storage;
-    localStorage.setItem("theme", theme);
+      return next;
+    });
   };
 
   const themeCtx = {

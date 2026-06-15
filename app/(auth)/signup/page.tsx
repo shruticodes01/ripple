@@ -72,7 +72,7 @@ export default function SignUp() {
         {serverError && <p className="text-red-700 text-sm">{serverError}</p>}
 
         <Input
-          className={`border border-blueish-black px-2 py-1 bg-white`}
+          className={`border border-blueish-black px-2 py-1 bg-white text-blueish-black`}
           id="fullName"
           name="fullName"
           label="Full Name"
@@ -85,7 +85,7 @@ export default function SignUp() {
         />
 
         <Input
-          className={`border border-blueish-black px-2 py-1 bg-white`}
+          className={`border border-blueish-black px-2 py-1 bg-white text-blueish-black`}
           id="userName"
           name="userName"
           label="Username"
@@ -97,7 +97,7 @@ export default function SignUp() {
           required
         />
         <Input
-          className={`border border-blueish-black px-2 py-1 bg-white`}
+          className={`border border-blueish-black px-2 py-1 bg-white text-blueish-black`}
           id="email"
           name="email"
           label="Email Address"
@@ -109,7 +109,7 @@ export default function SignUp() {
           required
         />
         <Input
-          className={`border border-blueish-black px-2 py-1 bg-white`}
+          className={`border border-blueish-black px-2 py-1 bg-white text-blueish-black`}
           id="password"
           name="password"
           label="Password"
@@ -123,7 +123,7 @@ export default function SignUp() {
           required
         />
         <Input
-          className={`border border-blueish-black px-2 py-1 bg-white`}
+          className={`border border-blueish-black px-2 py-1 bg-white text-blueish-black`}
           id="confirmPassword"
           name="confirmPassword"
           label="Confirm Password"
@@ -143,7 +143,7 @@ export default function SignUp() {
           disabled={pending}
         />
       </form>
-      <div className="flex flex-col justify-center items-center gap-2 mt-8">
+      <div className="flex flex-col justify-center items-center gap-2 py-8">
         <p>Already have an account?</p>
         <Link
           className="border-2 border-powdered-blue py-2 px-4 rounded-4xl font-bold"

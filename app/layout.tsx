@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/header/Header";
-import Footer from "@/components/footer/Footer";
-import Container from "@/layouts/Container";
+
+import Providers from "@/store/Providers";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -13,7 +12,7 @@ import Container from "@/layouts/Container";
 // const geistMono = Geist_Mono({
 //   variable: "--font-geist-mono",
 //   subsets: ["latin"],
-// });0[p----------45555555555fffrrtttttttttt]
+// });
 
 export const metadata: Metadata = {
   title: "Ripple",
@@ -27,7 +26,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={``}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="flex flex-col">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

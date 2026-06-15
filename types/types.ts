@@ -8,7 +8,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   icon?: React.ReactNode;
   children?: React.ReactNode;
   className?: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export type InputDisplay = "row" | "col";
@@ -26,10 +26,11 @@ export interface RippleCreator {
   _id: string;
   fullName: string;
   userName: string;
+  email?: string;
   avatar?: string;
 }
 
-export interface Ripple {
+export interface RippleData {
   _id: string;
   creator: string | RippleCreator;
   content: string;
@@ -43,11 +44,36 @@ export interface Ripple {
   updatedAt: string;
 }
 
+export interface CommentData {
+  _id: string;
+  content: string;
+  creator:
+    | string
+    | {
+        _id: string;
+        fullName: string;
+        userName: string;
+        avatar?: string;
+      };
+  ripple: string;
+  likedBy: string[];
+  parentComment: string | null;
+  replies: CommentData[];
+  createdAt: string;
+  updatedAt: string;
+}
+
 export type ThemeMode = "light" | "dark";
 
 export interface ThemeContextProps {
   theme: ThemeMode;
   onThemeToggle: () => void;
+}
+
+export interface AuthContextProps {
+  user: RippleCreator | null;
+  loading: boolean;
+  logout: () => void;
 }
 
 export type ContainerType = "default" | "narrow";

@@ -7,7 +7,7 @@ import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { SigninFormValidation } from "@/types/types";
 import { validateSignin } from "@/utils/validateForms";
-import { signIn } from "next-auth/react";
+import { TriangleAlert } from "lucide-react";
 
 export default function SignIn() {
   const router = useRouter();
@@ -40,20 +40,30 @@ export default function SignIn() {
     setPending(true);
     setServerError("");
 
-    const res = await signIn("credentials", {
-      identifier: formData.identifier,
-      password: formData.password,
-      redirect: false,
-    });
+    try {
+      const res = await fetch("api/auth/signin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          identifier: formData.identifier,
+          password: formData.password,
+        }),
+      });
 
-    if (res?.ok) {
-      const params = new URLSearchParams(window.location.search);
-      const callbackUrl = params.get("callbackUrl") || "/";
-      router.push(callbackUrl);
-    } else {
-      setServerError(res?.error || "Something went wrong");
+      const data = await res.json();
+
+      if (res?.ok) {
+        const params = new URLSearchParams(window.location.search);
+        const callbackUrl = params.get("callbackUrl") || "/";
+        router.push(callbackUrl);
+      } else {
+        setServerError(data.error || "Something went wrong");
+      }
+    } catch {
+      setServerError("Something went wrong");
+    } finally {
+      setPending(false);
     }
-    setPending(false);
   };
 
   return (
@@ -63,9 +73,14 @@ export default function SignIn() {
         noValidate
         onSubmit={handleSubmit}
       >
-        {serverError && <p className="text-red-500 text-sm">{serverError}</p>}
+        {serverError && (
+          <div className="flex gap-2 justify-center items-center">
+            <TriangleAlert className="w-5 h-5 text-red-700" />{" "}
+            <p className="text-red-700 text-md">{serverError}</p>
+          </div>
+        )}
         <Input
-          className={`border border-blueish-black px-2 py-1 bg-white`}
+          className={`border border-blueish-black px-2 py-1 bg-white text-blueish-black`}
           id="identifier"
           name="identifier"
           label="Email or Username"
@@ -77,7 +92,7 @@ export default function SignIn() {
           required
         />
         <Input
-          className={`border border-blueish-black px-2 py-1 bg-white`}
+          className={`border border-blueish-black px-2 py-1 bg-white text-blueish-black`}
           id="password"
           name="password"
           label="Password"
@@ -95,7 +110,7 @@ export default function SignIn() {
           label="Sign in"
         />
       </form>
-      <div className="flex flex-col justify-center items-center gap-2 mt-8">
+      <div className="flex flex-col justify-center items-center gap-2 py-8">
         <p>Don&apos;t have an account?</p>
         <Link
           className="border-2 border-powdered-blue py-2 px-4 rounded-4xl font-bold"
