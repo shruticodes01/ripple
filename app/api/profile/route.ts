@@ -4,8 +4,6 @@ import Ripple from "@/lib/models/Ripple";
 import User from "@/lib/models/User";
 import { NextRequest } from "next/server";
 
-// const TEMP_USER_ID = "6507f1f77bcf86cd79943901";
-
 // CREATE
 
 export async function POST(req: NextRequest) {

@@ -1,8 +1,12 @@
 import { getSingleRipple } from "@/lib/ripples";
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+export async function GET(
+  _: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
-    const ripple = await getSingleRipple(params.id);
+    const { id } = await params;
+    const ripple = await getSingleRipple(id);
     if (!ripple) {
       return Response.json({ error: "Ripple Not Found" }, { status: 404 });
     }
