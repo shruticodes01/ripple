@@ -6,38 +6,27 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTheme } from "@/store/themeContext/useTheme";
 import { formatTime } from "@/utils/formattedTimestamp";
-import React, { useEffect, useState } from "react";
-import { useAuth } from "@/store/authContext/useAuth";
+import React, { useState } from "react";
 
 export default function RippleCard({ ripple }: { ripple: RippleData }) {
   const router = useRouter();
   const { theme } = useTheme();
-  const { user } = useAuth();
-  const [likes, setLikes] = useState([]);
+
+  const [likes, setLikes] = useState(ripple.likedBy);
 
   const formattedTime = formatTime(ripple.createdAt);
-  console.log(formattedTime);
 
   const handleLikeBtnToggle = async () => {
     const res = await fetch(`/api/ripples/${ripple._id}/likedBy`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
     });
+    if (!res.ok) {
+      return;
+    }
     const updatedRipple = await res.json();
     setLikes(updatedRipple.likedBy);
   };
-
-  useEffect(() => {
-    if (!user) {
-      return;
-    }
-    const fetchLikes = async () => {
-      const res = await fetch(`/api/ripples/${ripple._id}/likedBy`);
-      const data = await res.json();
-      setLikes(data);
-    };
-    fetchLikes();
-  }, [ripple._id, user]);
 
   return (
     <article
