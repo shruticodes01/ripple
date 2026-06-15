@@ -1,7 +1,7 @@
 import RippleList from "@/components/ripple/RippleList";
 import { getRipples } from "@/lib/ripples";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const ripples = await getRipples();
