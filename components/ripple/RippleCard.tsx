@@ -1,42 +1,108 @@
-import { Ripple } from "@/types/types";
+"use client";
+import { RippleData } from "@/types/types";
 import Button from "../ui/Button";
-import { Heart, MessageCircle, Repeat, UserIcon } from "lucide-react";
+import { Bookmark, Heart, MessageCircle, Repeat, UserIcon } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useTheme } from "@/store/themeContext/useTheme";
+import { formatTime } from "@/utils/formattedTimestamp";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "@/store/authContext/useAuth";
 
-export default function RippleCard({ ripple }: { ripple: Ripple }) {
+export default function RippleCard({ ripple }: { ripple: RippleData }) {
+  const router = useRouter();
+  const { theme } = useTheme();
+  const { user } = useAuth();
+  const [likes, setLikes] = useState([]);
+
+  const formattedTime = formatTime(ripple.createdAt);
+  console.log(formattedTime);
+
+  const handleLikeBtnToggle = async () => {
+    const res = await fetch(`/api/ripples/${ripple._id}/likedBy`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+    });
+    const updatedRipple = await res.json();
+    setLikes(updatedRipple.likedBy);
+  };
+
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+    const fetchLikes = async () => {
+      const res = await fetch(`/api/ripples/${ripple._id}/likedBy`);
+      const data = await res.json();
+      setLikes(data);
+    };
+    fetchLikes();
+  }, [ripple._id, user]);
+
   return (
-    <article className={`w-full flex items-start gap-4 md:p-4`}>
-      <div className="max-w-full w-fit aspect-square p-2 border border-blue rounded-full">
+    <article
+      className={`w-full flex items-start gap-4 p-6 border cursor-pointer ${theme === "light" ? "bg-blue-200 border-blue" : "bg-navy-blue/40 border-powdered-blue-100"}`}
+      onClick={() => router.push(`/ripples/${ripple._id}`)}
+    >
+      <div
+        className={`max-w-full w-fit aspect-square p-2 border rounded-full ${theme === "light" ? "border-blue" : "border-powdered-blue-100"}`}
+      >
         <UserIcon className="shrink-0 max-[30rem]:w-5 max-[30rem]:h-5 w-7 h-7" />
       </div>{" "}
       <div className="w-full">
-        <h2>
-          {typeof ripple.creator === "object" ? ripple.creator.fullName : ""}
-        </h2>
-        <small>
-          {typeof ripple.creator === "object"
-            ? `@${ripple.creator.userName}`
-            : ""}
-        </small>
+        {typeof ripple.creator === "object" ? (
+          <Link
+            href={`/profile/${ripple.creator.userName}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2>{ripple.creator.fullName}</h2>
+            <small>{`@${ripple.creator.userName}`}</small>
+          </Link>
+        ) : null}
+
         <p>{ripple.content}</p>
-        <div className="py-2 flex gap-2">
-          <span>
-            <Button>
-              <Heart />
-            </Button>
-          </span>
-          <span>
-            <Button>
-              <MessageCircle />
-            </Button>
-          </span>
-          <span>
-            <Button>
-              <Repeat />
-            </Button>
-          </span>
+        <div className="py-2 flex justify-between items-center">
+          <div className="flex gap-6">
+            <div className="flex gap-1.5 items-center">
+              <Button
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                  e.stopPropagation();
+                  handleLikeBtnToggle();
+                }}
+              >
+                <Heart />
+              </Button>
+              <span>{likes.length}</span>
+            </div>
+
+            <div className="flex gap-1.5 items-center">
+              <Button
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                  e.stopPropagation();
+                  router.push(`/ripples/${ripple._id}`);
+                }}
+              >
+                <MessageCircle />
+              </Button>
+              <span>{ripple.comments.length}</span>
+            </div>
+
+            <div className="flex gap-1.5 items-center">
+              <Button>
+                <Repeat />
+              </Button>
+              <span>{ripple.rePost.length}</span>
+            </div>
+          </div>
+          <div className="flex gap-1.5.5 items-center">
+            <Bookmark />
+            <span>{ripple.bookmark.length}</span>
+          </div>
         </div>
-        <small>{ripple.views}</small>
-        <time>{ripple.createdAt}</time>
+        <div className="text-sm">
+          {/* <small>{`${ripple.views} views`}</small> */}
+          <time>{formattedTime}</time>
+        </div>
       </div>
     </article>
   );

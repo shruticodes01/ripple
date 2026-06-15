@@ -1,6 +1,22 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 
-const UserSchema = new mongoose.Schema(
+export interface IUser extends Document {
+  _id: mongoose.Types.ObjectId;
+  fullName: string;
+  userName: string;
+  email: string;
+  password: string;
+  avatar?: string;
+  banner?: string;
+  bio?: string;
+  following: mongoose.Types.ObjectId[];
+  followers: mongoose.Types.ObjectId[];
+  isVerified: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const UserSchema = new mongoose.Schema<IUser>(
   {
     fullName: { type: String, required: true },
     userName: {
@@ -22,6 +38,6 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-const User = mongoose.models.User || mongoose.model("User", UserSchema);
+const User = mongoose.models.User || mongoose.model<IUser>("User", UserSchema);
 
 export default User;

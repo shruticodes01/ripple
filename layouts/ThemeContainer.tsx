@@ -9,6 +9,7 @@ export default function ThemeContainer({
   children: React.ReactNode;
 }) {
   const { theme } = useTheme();
+
   return (
     <div
       className={`w-full min-h-screen ${theme === "light" ? "bg-white text-blueish-black" : "bg-blueish-black text-light-gray"} ${className}`}

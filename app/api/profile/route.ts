@@ -1,8 +1,7 @@
-import { authOptions } from "@/lib/auth";
+import { getAuthUser } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import Ripple from "@/lib/models/Ripple";
 import User from "@/lib/models/User";
-import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
 
 // const TEMP_USER_ID = "6507f1f77bcf86cd79943901";
@@ -13,22 +12,17 @@ export async function POST(req: NextRequest) {
   try {
     await connectDB();
 
-    const session = await getServerSession(authOptions);
-    if (!session) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const user = await User.findOne({
-      $or: [{ email: session.user.email }, { userName: session.user.userName }],
-    });
-
+    const user = await User.findById(authUser.userId);
     if (!user) {
       return Response.json({ error: "User not found" }, { status: 404 });
     }
 
-    const body = await req.json();
-    const { content } = body;
-
+    const { content } = await req.json();
     if (!content.trim()) {
       return Response.json({ error: "Content is required" }, { status: 400 });
     }
@@ -50,21 +44,21 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   try {
     await connectDB();
-    const session = await getServerSession(authOptions);
-    if (!session) {
+
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const user = await User.findOne({
-      $or: [{ email: session.user.email }, { userName: session.user.userName }],
-    });
+    const user = await User.findById(authUser.userId);
     if (!user) {
       return Response.json({ error: "User not found" }, { status: 404 });
     }
 
     const ripples = await Ripple.find({ creator: user._id })
       .populate("creator", "fullName userName avatar")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .lean();
     return Response.json(ripples, { status: 200 });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown Error";
@@ -82,14 +76,13 @@ export async function GET() {
 export async function PUT(req: NextRequest) {
   try {
     await connectDB();
-    const session = await getServerSession(authOptions);
-    if (!session) {
+    const authUser = await getAuthUser();
+
+    if (!authUser) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const user = await User.findOne({
-      $or: [{ email: session.user.email }, { userName: session.user.userName }],
-    });
+    const user = await User.findById(authUser.userId);
     if (!user) {
       return Response.json({ error: "User not found" }, { status: 404 });
     }
@@ -120,14 +113,12 @@ export async function PUT(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   try {
     await connectDB();
-    const session = await getServerSession(authOptions);
-    if (!session) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const user = await User.findOne({
-      $or: [{ email: session.user.email }, { userName: session.user.userName }],
-    });
+    const user = await User.findById(authUser.userId);
     if (!user) {
       return Response.json({ error: "User not found" }, { status: 404 });
     }

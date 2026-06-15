@@ -1,11 +1,12 @@
 "use client";
-import Footer from "@/components/footer/Footer";
+// import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
 import SidebarNav from "@/components/sidebar/SidebarNav";
 import SidebarTrends from "@/components/sidebar/SidebarTrends";
 import Container from "@/layouts/Container";
 import ThemeContainer from "@/layouts/ThemeContainer";
-import ThemeContextProvider from "@/store/themeContext/ThemeContext";
+import { useTheme } from "@/store/themeContext/useTheme";
+
 import React from "react";
 
 export default function MainLayout({
@@ -13,17 +14,17 @@ export default function MainLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { theme } = useTheme();
   return (
-    <ThemeContextProvider>
-      <ThemeContainer>
-        <Header />
-        <Container className="grid__container">
-          <SidebarNav></SidebarNav>
-          <main className="min-h-screen main">{children}</main>
-          <SidebarTrends></SidebarTrends>
-        </Container>
-        <Footer />
-      </ThemeContainer>
-    </ThemeContextProvider>
+    <ThemeContainer>
+      <Header />
+      <Container
+        className={`grid__container ${theme === "light" ? "bg-white" : "bg-blueish-black"}`}
+      >
+        <SidebarNav></SidebarNav>
+        <main className={`min-h-screen main pt-20 `}>{children}</main>
+        <SidebarTrends></SidebarTrends>
+      </Container>
+    </ThemeContainer>
   );
 }

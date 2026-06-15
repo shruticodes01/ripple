@@ -1,17 +1,21 @@
 "use client";
 
-import RippleCard from "@/components/ripple/RippleCard";
+import RippleList from "@/components/ripple/RippleList";
 import Button from "@/components/ui/Button";
+import { useAuth } from "@/store/authContext/useAuth";
 import { useTheme } from "@/store/themeContext/useTheme";
-import { Ripple } from "@/types/types";
+import { RippleData } from "@/types/types";
 import { SendHorizonal, UserIcon } from "lucide-react";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 export default function UserProfile() {
   const { theme } = useTheme();
+  const { user, loading } = useAuth();
   const [ripplePost, setRipplePost] = useState("");
-  const [userRipples, setUserRipples] = useState<Ripple[]>([]);
+  const [userRipples, setUserRipples] = useState<RippleData[]>([]);
+
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setRipplePost(e.target.value);
@@ -32,12 +36,21 @@ export default function UserProfile() {
     if (res.ok) {
       const newRipple = await res.json();
       setUserRipples((prev) => [newRipple, ...prev]);
-      console.log(`type: ${typeof userRipples}`);
       setRipplePost("");
     }
   };
 
   useEffect(() => {
+    if (!loading && !user) {
+      router.push("/signin");
+    }
+  }, [user, loading, router]);
+
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
     async function fetchUserRipples() {
       const res = await fetch("/api/profile");
       const data = await res.json();
@@ -47,21 +60,14 @@ export default function UserProfile() {
     }
 
     fetchUserRipples();
-  }, []);
+  }, [user]);
 
   return (
     <>
-      <section className={`w-full pt-20`}>
+      <section>
         <div className="relative mb-12">
           <div className={`w-full max-md:h-80 md:h-125 bg-blue-300 `}>
             <div className="w-full h-full flex justify-end p-4">
-              {/* <Image
-                className=""
-                src="/"
-                alt="profile-banner"
-                width={1500}
-                height={500}
-              /> */}
               <Button
                 className={`self-end text-navy-blue`}
                 label="+ Add Banner"
@@ -76,7 +82,7 @@ export default function UserProfile() {
               strokeWidth={0.5}
             />
           </div>
-          <div className="w-full h-12 flex justify-end items-center">
+          <div className="w-full h-12 flex justify-end items-center pt-4">
             <Button
               className={`max-md:px-2.5 max-md:py-1 md:px-4 md:py-2 rounded-full ${theme === "light" ? "bg-blueish-black text-light-gray" : "bg-light-gray text-blueish-black"}`}
               label="Follow"
@@ -125,17 +131,9 @@ export default function UserProfile() {
           </Button>
         </form>
       </section>
-      <section>
-        <ul className="mt-8">
-          {userRipples.map((ripple) => {
-            return (
-              <li className="py-2" key={ripple._id}>
-                <RippleCard ripple={ripple} />
-              </li>
-            );
-          })}
-        </ul>
-      </section>
+      <>
+        <RippleList ripples={userRipples} />
+      </>
     </>
   );
 }

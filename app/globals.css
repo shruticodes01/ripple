@@ -48,9 +48,9 @@
   box-sizing: border-box;
 }
 
-*:not(dialog) {
+/* *:not(dialog) {
   margin: 0;
-}
+} */
 
 html {
   -moz-text-size-adjust: none;
@@ -136,7 +136,8 @@ h6 {
 @media(max-width:48rem) {
 
   .header__desktop,
-  .sidebar__nav {
+  .sidebar__nav,
+  .sidebar__trends {
     display: none;
   }
 
