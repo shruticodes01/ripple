@@ -12,7 +12,7 @@ export default function ThemeContainer({
 
   return (
     <div
-      className={`w-full min-h-screen ${theme === "light" ? "bg-white text-blueish-black" : "bg-blueish-black text-light-gray"} ${className}`}
+      className={`w-full min-h-screen overflow-y-scroll md:overscroll-contain ${theme === "light" ? "bg-white text-blueish-black" : "bg-blueish-black text-light-gray"} ${className}`}
     >
       {children}
     </div>

@@ -11,8 +11,13 @@ import React, { useState } from "react";
 export default function RippleCard({ ripple }: { ripple: RippleData }) {
   const router = useRouter();
   const { theme } = useTheme();
-
   const [likes, setLikes] = useState(ripple.likedBy);
+
+  const creator = typeof ripple.creator === "object" ? ripple.creator : null;
+  const capitalizedName = creator?.fullName
+    .split(" ")
+    .map((str) => str.charAt(0).toUpperCase() + str.substring(1))
+    .join(" ");
 
   const formattedTime = formatTime(ripple.createdAt);
 
@@ -30,7 +35,7 @@ export default function RippleCard({ ripple }: { ripple: RippleData }) {
 
   return (
     <article
-      className={`w-full flex items-start gap-4 p-6 border cursor-pointer ${theme === "light" ? "bg-blue-200 border-blue" : "bg-navy-blue/40 border-powdered-blue-100"}`}
+      className={`w-full h-fit flex items-start gap-4 p-6 border cursor-pointer rounded-lg ${theme === "light" ? "bg-blue-200 border-blue" : "bg-navy-blue/40 border-powdered-blue-100"}`}
       onClick={() => router.push(`/ripples/${ripple._id}`)}
     >
       <div
@@ -39,15 +44,13 @@ export default function RippleCard({ ripple }: { ripple: RippleData }) {
         <UserIcon className="shrink-0 max-[30rem]:w-5 max-[30rem]:h-5 w-7 h-7" />
       </div>{" "}
       <div className="w-full">
-        {typeof ripple.creator === "object" ? (
-          <Link
-            href={`/profile/${ripple.creator.userName}`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2>{ripple.creator.fullName}</h2>
-            <small>{`@${ripple.creator.userName}`}</small>
-          </Link>
-        ) : null}
+        <Link
+          href={`/profile/${creator?.userName}`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <h2>{capitalizedName}</h2>
+          <small>{`@${creator?.userName}`}</small>
+        </Link>
 
         <p>{ripple.content}</p>
         <div className="py-2 flex justify-between items-center">

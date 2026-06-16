@@ -8,7 +8,7 @@ export default function SidebarNav() {
   const { theme } = useTheme();
   return (
     <aside
-      className={`h-full sidebar__nav pt-20 ${theme === "light" ? "" : ""}`}
+      className={`h-full sidebar__nav row-span-full pt-20 overflow-y-scroll ${theme === "light" ? "" : ""}`}
     >
       <nav className="h-full">
         <ul className="h-full flex flex-col gap-20 py-4">

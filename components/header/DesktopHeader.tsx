@@ -9,6 +9,13 @@ export default function DesktopHeader({ className }: { className: string }) {
   const { theme } = useTheme();
   const { user } = useAuth();
 
+  const capitalizedName = user?.fullName
+    .split(" ")
+    .map((str) => str.charAt(0).toUpperCase() + str.substring(1))
+    .join(" ");
+
+  console.log(capitalizedName);
+
   return (
     <header
       className={`w-full h-14 px-4 fixed top z-1 ${theme === "light" ? "bg-white" : "bg-blueish-black"} ${className}`}
@@ -29,7 +36,7 @@ export default function DesktopHeader({ className }: { className: string }) {
           <ul className="flex gap-4">
             {user ? (
               <li>
-                <p>{`Hi! ${user.fullName.toUpperCase()}`}</p>
+                <p>{`Hi! ${capitalizedName}`}</p>
               </li>
             ) : (
               <>
