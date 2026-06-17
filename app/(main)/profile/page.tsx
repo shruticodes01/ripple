@@ -99,11 +99,11 @@ export default function UserProfile() {
               <h3 className="mb-3 font-bold">Bio</h3>
               {user?.userId && (
                 <ul>
-                  <li>
-                    <p>{capitalizedName}</p>
-                  </li>
-                  <li>
-                    <p>@{user.userName}</p>
+                  <li>{capitalizedName}</li>
+                  <li
+                    className={`font-normal ${theme === "light" ? "text-blue" : "text-powdered-blue-100"}`}
+                  >
+                    @{user.userName}
                   </li>
                 </ul>
               )}
