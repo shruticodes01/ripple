@@ -70,8 +70,15 @@ export interface ThemeContextProps {
   onThemeToggle: () => void;
 }
 
+export interface AuthUser {
+  userId: string;
+  fullName: string;
+  userName: string;
+  email?: string;
+}
+
 export interface AuthContextProps {
-  user: RippleCreator | null;
+  user: AuthUser | null;
   loading: boolean;
   logout: () => void;
 }

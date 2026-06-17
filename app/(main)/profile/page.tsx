@@ -55,7 +55,6 @@ export default function UserProfile() {
       const res = await fetch("/api/profile");
       const data = await res.json();
 
-      console.log("API response:", data);
       setUserRipples(data);
     }
 

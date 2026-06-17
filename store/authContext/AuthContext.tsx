@@ -1,4 +1,4 @@
-import { AuthContextProps, RippleCreator } from "@/types/types";
+import { AuthContextProps, AuthUser } from "@/types/types";
 import React, { createContext, useEffect, useState } from "react";
 
 export const AuthContext = createContext<AuthContextProps>({
@@ -8,7 +8,7 @@ export const AuthContext = createContext<AuthContextProps>({
 });
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<RippleCreator | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {

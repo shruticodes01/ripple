@@ -33,11 +33,10 @@ export default function CommentsSection({ rippleId }: { rippleId: string }) {
   };
 
   useEffect(() => {
-    console.log("fetching comments for rippleId", rippleId);
     const fetchComments = async () => {
       const res = await fetch(`/api/ripples/${rippleId}/comments`);
       const data = await res.json();
-      console.log("comments data:", data);
+
       setComments(data);
     };
     fetchComments();
@@ -56,7 +55,7 @@ export default function CommentsSection({ rippleId }: { rippleId: string }) {
             cols={30}
             rows={2}
             value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
+            onChange={(e) => setCommentText(e.currentTarget.value)}
           />
           <Button className={`shrink-0`} type="submit">
             <ArrowUp />
@@ -68,7 +67,7 @@ export default function CommentsSection({ rippleId }: { rippleId: string }) {
         </p>
       )}
 
-      {comments.length === 0 ? (
+      {user?.userId && comments.length === 0 ? (
         <p className="pr-4">No comments yet. Be the first to comment!</p>
       ) : (
         <ul className="w-full flex flex-col px-4">

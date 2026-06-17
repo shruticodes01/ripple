@@ -14,8 +14,6 @@ export default function DesktopHeader({ className }: { className: string }) {
     .map((str) => str.charAt(0).toUpperCase() + str.substring(1))
     .join(" ");
 
-  console.log(capitalizedName);
-
   return (
     <header
       className={`w-full h-14 px-4 fixed top z-1 ${theme === "light" ? "bg-white" : "bg-blueish-black"} ${className}`}
