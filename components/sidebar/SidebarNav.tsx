@@ -1,7 +1,13 @@
 import Link from "next/link";
 import ToggleThemeBtn from "../ui/ToggleThemeBtn";
 import SignOutButton from "../ui/SignoutButton";
-import { Bookmark, Home, Mail, UserCircleIcon } from "lucide-react";
+import {
+  Bookmark,
+  CirclePower,
+  Home,
+  Mail,
+  UserCircleIcon,
+} from "lucide-react";
 import { useTheme } from "@/store/themeContext/useTheme";
 
 export default function SidebarNav() {
@@ -38,7 +44,8 @@ export default function SidebarNav() {
             <ToggleThemeBtn />
           </li>
           <ul>
-            <li>
+            <li className="flex gap-2">
+              <CirclePower />
               <SignOutButton />
             </li>
           </ul>
