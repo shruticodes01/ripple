@@ -5,6 +5,7 @@ import { UserIcon } from "lucide-react";
 import { RippleData } from "@/types/types";
 import { IUser } from "@/lib/models/User";
 import RippleList from "../ripple/RippleList";
+import { formatName } from "@/utils/formattedName";
 
 export default function PublicUserProfile({
   user,
@@ -12,9 +13,12 @@ export default function PublicUserProfile({
   user: Omit<IUser, "password"> & { ripples: RippleData[] };
 }) {
   const { theme } = useTheme();
+  const capitalizedName = formatName(user.fullName);
   return (
     <>
-      <section className={`w-full pt-20 pb-6`}>
+      <section
+        className={`w-full pt-20 pb-10 border-b ${theme === "light" ? "border-blue" : "border-powdered-blue-100"}`}
+      >
         <div className="relative mb-12">
           <div className={`w-full max-md:h-80 md:h-125 bg-blue-300 `}>
             <div className="w-full h-full flex justify-end p-4">
@@ -32,20 +36,22 @@ export default function PublicUserProfile({
               strokeWidth={0.5}
             />
           </div>
-          <div className="w-full h-12 flex justify-end items-center pt-4">
+          <div className="w-full h-12 flex justify-end items-center pt-4 pr-3">
             <Button
               className={`max-md:px-2.5 max-md:py-1 md:px-4 md:py-2 rounded-full ${theme === "light" ? "bg-blueish-black text-light-gray" : "bg-light-gray text-blueish-black"}`}
               label="Follow"
             />
           </div>
         </div>
-        <div className="flex flex-col gap-4 pt-10">
+        <div className="flex flex-col gap-4 pt-10 px-3">
           <div className="flex justify-between">
             <div className="flex flex-col gap-3 py-2">
-              <h3 className="">Bio</h3>
+              <h3 className="font-bold">Bio</h3>
               <ul>
-                <li>{user.fullName}</li>
-                <li>{`@${user.userName}`}</li>
+                <li className="">{capitalizedName}</li>
+                <li
+                  className={`font-normal ${theme === "light" ? "text-blue" : "text-powdered-blue-100"}`}
+                >{`@${user.userName}`}</li>
               </ul>
             </div>
             <div>
@@ -66,7 +72,7 @@ export default function PublicUserProfile({
         </div>
       </section>
 
-      <section className={`py-4`}>
+      <section className={`pt-10`}>
         <RippleList ripples={user.ripples} />
       </section>
     </>

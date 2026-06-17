@@ -1,4 +1,3 @@
-import { buttonVariant } from "@/styles/global";
 import { ButtonProps } from "@/types/types";
 
 export default function Button({
@@ -10,9 +9,15 @@ export default function Button({
   onClick,
   ...props
 }: ButtonProps) {
+  const variantClasses = {
+    primary: "",
+    outline: "",
+    text: "",
+    icon: "",
+  };
   return (
     <button
-      className={`cursor-pointer ${buttonVariant[variant]} ${className}`}
+      className={`cursor-pointer ${variantClasses[variant]} ${className}`}
       onClick={onClick}
       {...props}
     >

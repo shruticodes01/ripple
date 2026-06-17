@@ -18,6 +18,7 @@ import { useTheme } from "@/store/themeContext/useTheme";
 import { formatTime } from "@/utils/formattedTimestamp";
 import React, { useState } from "react";
 import { useAuth } from "@/store/authContext/useAuth";
+import { formatName } from "@/utils/formattedName";
 
 export default function RippleCard({ ripple }: { ripple: RippleData }) {
   const router = useRouter();
@@ -33,10 +34,7 @@ export default function RippleCard({ ripple }: { ripple: RippleData }) {
   const [isDeleted, setIsDeleted] = useState(false);
 
   const creator = typeof ripple.creator === "object" ? ripple.creator : null;
-  const capitalizedName = creator?.fullName
-    .split(" ")
-    .map((str) => str.charAt(0).toUpperCase() + str.substring(1))
-    .join(" ");
+  const capitalizedName = formatName(creator?.fullName as string);
 
   const formattedTime = formatTime(ripple.createdAt);
 
@@ -94,7 +92,11 @@ export default function RippleCard({ ripple }: { ripple: RippleData }) {
   return (
     <article
       className={`w-full max-w-160 h-fit flex items-start justify-between gap-4 py-6 px-4 border cursor-pointer rounded-lg ${theme === "light" ? "bg-blue-200 border-blue" : "bg-navy-blue/40 border-powdered-blue-100"}`}
-      onClick={() => router.push(`/ripples/${ripple._id}`)}
+      onClick={() => {
+        if (!isEditing) {
+          router.push(`/ripples/${ripple._id}`);
+        }
+      }}
     >
       <div
         className={`max-w-full w-fit aspect-square p-2 border rounded-full ${theme === "light" ? "border-blue" : "border-powdered-blue-100"}`}
@@ -119,7 +121,7 @@ export default function RippleCard({ ripple }: { ripple: RippleData }) {
             onSubmit={handleEditedPostSubmit}
           >
             <textarea
-              className="bg-light-gray px-2 py-1 rounded-md"
+              className="bg-light-gray text-blueish-black px-2 py-1 rounded-md"
               value={currentContent}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                 setCurrentContent(e.target.value)
@@ -193,7 +195,7 @@ export default function RippleCard({ ripple }: { ripple: RippleData }) {
 
         {cardMenuOpen && (
           <div
-            className={`w-full max-w-fit flex gap-2 p-2 rounded-lg absolute right-0 top-full ${theme === "light" ? "bg-light-gray" : ""}`}
+            className={`w-full max-w-fit flex gap-2 p-2 rounded-lg absolute right-0 top-full ${theme === "light" ? "bg-light-gray" : "bg-powdered-blue"}`}
           >
             <Button
               className="shrink-0"

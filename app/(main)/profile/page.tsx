@@ -5,6 +5,7 @@ import Button from "@/components/ui/Button";
 import { useAuth } from "@/store/authContext/useAuth";
 import { useTheme } from "@/store/themeContext/useTheme";
 import { RippleData } from "@/types/types";
+import { formatName } from "@/utils/formattedName";
 import { SendHorizonal, UserIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -16,6 +17,8 @@ export default function UserProfile() {
   const [userRipples, setUserRipples] = useState<RippleData[]>([]);
 
   const router = useRouter();
+
+  const capitalizedName = formatName(user?.fullName as string);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setRipplePost(e.target.value);
@@ -63,7 +66,9 @@ export default function UserProfile() {
 
   return (
     <>
-      <section>
+      <section
+        className={`pb-10 border-b ${theme === "light" ? "border-blue" : "border-powdered-blue-100"}`}
+      >
         <div className="relative mb-12">
           <div className={`w-full max-md:h-80 md:h-125 bg-blue-300 `}>
             <div className="w-full h-full flex justify-end p-4">
@@ -81,16 +86,28 @@ export default function UserProfile() {
               strokeWidth={0.5}
             />
           </div>
-          <div className="w-full h-12 flex justify-end items-center pt-4">
+          <div className="w-full h-12 flex justify-end items-center pt-4 pr-3">
             <Button
               className={`max-md:px-2.5 max-md:py-1 md:px-4 md:py-2 rounded-full ${theme === "light" ? "bg-blueish-black text-light-gray" : "bg-light-gray text-blueish-black"}`}
               label="Follow"
             />
           </div>
         </div>
-        <div className="flex flex-col gap-4 pt-10">
+        <div className={` flex flex-col gap-4 pt-10 px-3 `}>
           <div className="flex justify-between">
-            <p>Bio</p>
+            <div>
+              <h3 className="mb-3 font-bold">Bio</h3>
+              {user?.userId && (
+                <ul>
+                  <li>
+                    <p>{capitalizedName}</p>
+                  </li>
+                  <li>
+                    <p>@{user.userName}</p>
+                  </li>
+                </ul>
+              )}
+            </div>
             <div>
               <Button
                 className={`max-md:px-2.5 max-md:py-1 md:px-4 md:py-2 rounded-full ${theme === "light" ? "bg-blueish-black text-light-gray" : "bg-light-gray text-blueish-black"}`}
@@ -108,7 +125,7 @@ export default function UserProfile() {
           </div>
         </div>
       </section>
-      <section className="py-10">
+      <section className={`py-10`}>
         <form
           className="flex max-md:gap-2 md:gap-4 items-baseline-last"
           onSubmit={handleRippleSubmit}

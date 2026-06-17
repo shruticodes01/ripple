@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
 interface MongooseCache {
-  conn: typeof mongoose | null;
-  promise: Promise<typeof mongoose> | null;
+  conn: typeof mongoose | null; // active connection
+  promise: Promise<typeof mongoose> | null; //connection attempt in progress
 }
 
 declare global {
@@ -10,7 +10,7 @@ declare global {
 }
 
 const MONGODB_URI = process.env.MONGODB_ATLAS_URI;
-// check URI at module load time
+// checks db address exists at module load time
 if (!MONGODB_URI) {
   throw new Error(
     "Please define the MONGODB_URI environment variable inside .env.local",
@@ -18,7 +18,7 @@ if (!MONGODB_URI) {
 }
 
 // caching for local development
-// if global.mongoose exists re-use it
+// checks if a property named mongoose (global.mongoose) exists on node.js's global object, if yes re-use it
 let cached: MongooseCache = global.mongoose as MongooseCache;
 
 if (!cached) {
@@ -28,15 +28,15 @@ if (!cached) {
 
 export async function connectDB() {
   if (cached.conn) {
-    return cached.conn;
+    return cached.conn; //if already connected re-use it
   }
 
   if (!cached.promise) {
     cached.promise = mongoose.connect(MONGODB_URI as string, {
-      bufferCommands: false,
-    });
+      bufferCommands: false, //if no connection, throws an error immediately
+    }); // starts connecting and stored the attempt
   }
 
-  cached.conn = await cached.promise;
+  cached.conn = await cached.promise; //wait for connection to finish
   return cached.conn;
 }
