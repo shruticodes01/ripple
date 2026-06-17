@@ -133,16 +133,16 @@ export default function UserProfile() {
           <label className="flex flex-col gap-4" htmlFor="ripplePost">
             Create a wave of ripples by sharing your thoughts
             <textarea
-              className={`w-full border rounded-md max-md:p-2 md:p-4 ${theme === "light" ? "border-blueish-black" : "border-light-gray"}`}
+              className={`w-full max-w-150 border rounded-md max-md:p-2 md:p-4 ${theme === "light" ? "border-blueish-black" : "border-light-gray"}`}
               id="ripplePost"
               name="ripplePost"
               rows={5}
-              cols={40}
+              cols={55}
               onChange={handleChange}
               value={ripplePost}
             />
           </label>
-          <Button className="self-end" type="submit">
+          <Button className="self-end shrink-0" type="submit">
             <SendHorizonal />
           </Button>
         </form>
