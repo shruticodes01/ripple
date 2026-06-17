@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
       userName: user.userName,
       fullName: user.fullName,
     })
-      .setProtectedHeader({ alg: "HS256" })
+      .setProtectedHeader({ alg: "HS256" }) //algorithm used to create a stamp
       .setExpirationTime("7d")
       .sign(secret);
 
