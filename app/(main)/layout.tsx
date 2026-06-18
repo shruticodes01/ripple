@@ -17,7 +17,7 @@ export default function MainLayout({
       <Header />
       <Container className={`md:grid md:grid-cols-[20%_55%_25%]`}>
         <SidebarNav></SidebarNav>
-        <main className={`main pt-20 px-3 row-span-full`}>{children}</main>
+        <main className={`main pt-20 md:px-3 row-span-full`}>{children}</main>
         <SidebarTrends></SidebarTrends>
       </Container>
     </ThemeContainer>

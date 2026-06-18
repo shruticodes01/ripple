@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import Button from "./Button";
 import { useAuth } from "@/store/authContext/useAuth";
+import { CirclePower } from "lucide-react";
 
 export default function SignOutButton({ className }: { className?: string }) {
   const { logout } = useAuth();
@@ -13,9 +14,12 @@ export default function SignOutButton({ className }: { className?: string }) {
 
   return (
     <Button
-      className={` ${className}`}
-      label="Sign Out"
+      className={`inline-flex gap-2 ${className}`}
+      label=""
       onClick={handleSignOut}
-    ></Button>
+    >
+      <CirclePower />
+      <span>Signout</span>
+    </Button>
   );
 }

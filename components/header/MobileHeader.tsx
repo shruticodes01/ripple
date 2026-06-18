@@ -47,11 +47,12 @@ export default function MobileHeader({ className }: { className: string }) {
           className={`w-full h-full flex uppercase **:cursor-pointer ${!navMenuVisible ? "p-4 translate-x-full transition-transform duration-350ms ease-out" : theme === "light" && navMenuVisible ? `${navVisibleClass} bg-light-gray/50 backdrop-blur-[6rem] text-blueish-black` : theme === "dark" && navMenuVisible ? `${navVisibleClass} bg-blueish-black/60 text-light-gray backdrop-blur-[10rem]` : ""}`}
         >
           <li
-            className={`p-2 hover:scale-110 hover:inset-ring-2 ${theme === "light" ? " hover:inset-ring-blue hover:shadow-[0_0_0.25rem_-0.05rem]" : "hover:inset-ring-powdered-blue hover:shadow-[0_0_0.25rem_-0.05rem]"}`}
+            className={`p-2 ${theme === "light" ? "hover:text-blue " : "hover:text-powdered-blue-100"}`}
           >
             <Link
               className={`flex gap-2 focus-visible:p-2 not-hover:focus-visible:outline-2 focus-visible:outline-offset-3 ${theme === "light" ? "focus-visible:bg-blue/40 focus-visible:outline-blue" : theme === "dark" && navMenuVisible ? "focus-visible:bg-powdered-blue/40 focus-visible:outline-powdered-blue" : "p-3"}`}
               href="/"
+              onClick={() => setNavMenuVisible((menuVisible) => !menuVisible)}
             >
               <Home /> Home
             </Link>
@@ -63,6 +64,7 @@ export default function MobileHeader({ className }: { className: string }) {
             <Link
               className={`flex gap-2 focus-visible:p-2 not-hover:focus-visible:outline-2 focus-visible:outline-offset-3 ${theme === "light" ? "focus-visible:bg-blue/40 focus-visible:outline-blue" : theme === "dark" && navMenuVisible ? "focus-visible:bg-powdered-blue/40 focus-visible:outline-powdered-blue" : "p-3"}`}
               href="/profile"
+              onClick={() => setNavMenuVisible((menuVisible) => !menuVisible)}
             >
               <UserIcon /> Profile
             </Link>
@@ -74,6 +76,7 @@ export default function MobileHeader({ className }: { className: string }) {
             <Link
               className={`flex gap-2 focus-visible:p-2 not-hover:focus-visible:outline-2 focus-visible:outline-offset-3 ${theme === "light" ? "focus-visible:bg-blue/40 focus-visible:outline-blue" : "focus-visible:bg-powdered-blue/40 focus-visible:outline-powdered-blue"}`}
               href="/messages"
+              onClick={() => setNavMenuVisible((menuVisible) => !menuVisible)}
             >
               <Mail /> Messages
             </Link>
@@ -85,6 +88,7 @@ export default function MobileHeader({ className }: { className: string }) {
             <Link
               className={`flex gap-2 focus-visible:p-2 not-hover:focus-visible:outline-2 focus-visible:outline-offset-3 ${theme === "light" ? "focus-visible:bg-blue/40 focus-visible:outline-blue" : "focus-visible:bg-powdered-blue/40 focus-visible:outline-powdered-blue"}`}
               href="/bookmarks"
+              onToggle={() => setNavMenuVisible((menuVisible) => !menuVisible)}
             >
               <Bookmark /> Bookmarks
             </Link>

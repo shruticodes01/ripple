@@ -99,7 +99,7 @@ export default function RippleCard({ ripple }: { ripple: RippleData }) {
       }}
     >
       <div
-        className={`max-w-full w-fit aspect-square p-2 border rounded-full ${theme === "light" ? "border-blue" : "border-powdered-blue-100"}`}
+        className={`shrink-0 max-w-full w-fit aspect-square p-2 border rounded-full ${theme === "light" ? "border-blue" : "border-powdered-blue-100"}`}
       >
         <UserIcon className="shrink-0 max-[30rem]:w-5 max-[30rem]:h-5 w-7 h-7" />
       </div>{" "}

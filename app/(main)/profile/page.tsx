@@ -73,7 +73,7 @@ export default function UserProfile() {
           <div className={`w-full max-md:h-80 md:h-125 bg-blue-300 `}>
             <div className="w-full h-full flex justify-end p-4">
               <Button
-                className={`self-end text-navy-blue`}
+                className={`self-end text-navy-blue hover:scale-105 hover:text-blue focus-visible:outline-2 focus-visible:outline-offset-2 ${theme === "light" ? "focus-visible:outline-blue focus-visible:text-blue" : "focus-visible:outline-powdered-blue focus-visible:text-blue"}`}
                 label="+ Add Banner"
               />
             </div>
@@ -88,7 +88,7 @@ export default function UserProfile() {
           </div>
           <div className="w-full h-12 flex justify-end items-center pt-4 pr-3">
             <Button
-              className={`max-md:px-2.5 max-md:py-1 md:px-4 md:py-2 rounded-full ${theme === "light" ? "bg-blueish-black text-light-gray" : "bg-light-gray text-blueish-black"}`}
+              className={`max-md:px-2.5 max-md:py-1 md:px-4 md:py-2 rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 ${theme === "light" ? "bg-blueish-black text-light-gray hover:bg-blue focus-visible:outline-blue focus-visible:bg-blue-700" : "bg-light-gray text-blueish-black hover:bg-powdered-blue-100 focus-visible:outline-powdered-blue focus-visible:bg-powdered-blue-100"}`}
               label="Follow"
             />
           </div>
@@ -110,7 +110,7 @@ export default function UserProfile() {
             </div>
             <div>
               <Button
-                className={`max-md:px-2.5 max-md:py-1 md:px-4 md:py-2 rounded-full ${theme === "light" ? "bg-blueish-black text-light-gray" : "bg-light-gray text-blueish-black"}`}
+                className={`max-md:px-2.5 max-md:py-1 md:px-4 md:py-2 rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 ${theme === "light" ? "bg-blueish-black text-light-gray hover:bg-blue focus-visible:outline-blue focus-visible:bg-blue-700" : "bg-light-gray text-blueish-black hover:bg-powdered-blue-100 focus-visible:outline-powdered-blue focus-visible:bg-powdered-blue-100"}`}
                 label="Edit Profile"
               />
             </div>
@@ -133,7 +133,7 @@ export default function UserProfile() {
           <label className="flex flex-col gap-4" htmlFor="ripplePost">
             Create a wave of ripples by sharing your thoughts
             <textarea
-              className={`w-full max-w-150 border rounded-md max-md:p-2 md:p-4 ${theme === "light" ? "border-blueish-black" : "border-light-gray"}`}
+              className={`w-full max-w-150 border focus-visible:outline-2 rounded-md max-md:p-2 md:p-4 ${theme === "light" ? "border-blueish-black focus-visible:border-blue focus-visible:outline-blue" : "border-light-gray focus-visible:border-powdered-blue-100 focus-visible:outline-powdered-blue-100"}`}
               id="ripplePost"
               name="ripplePost"
               rows={5}
@@ -142,7 +142,10 @@ export default function UserProfile() {
               value={ripplePost}
             />
           </label>
-          <Button className="self-end shrink-0" type="submit">
+          <Button
+            className={`inline-flex items-center justify-center self-end shrink-0 p-2 rounded-full hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 ${theme === "light" ? " hover:bg-blue focus-visible:outline-blue focus-visible:bg-blue-700 focus-visible:text-light-gray" : "hover:text-blueish-black hover:bg-powdered-blue-100 focus-visible:outline-powdered-blue focus-visible:bg-powdered-blue-100 focus-visible:text-blueish-black"}`}
+            type="submit"
+          >
             <SendHorizonal />
           </Button>
         </form>
