@@ -30,7 +30,7 @@ pnpm dev
 bun dev
 ```
 
-# Folder Structure
+## Folder Structure
 
 ├── app
 | ├── (auth)
